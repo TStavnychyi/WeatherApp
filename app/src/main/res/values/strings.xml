@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">WeatherApp</string>
+    <string name="fragment_search_city_title">Get weather information from...</string>
+</resources>
