@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<ScrollView
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -9,131 +10,143 @@
         android:fitsSystemWindows="true"
         >
 
-    <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
+    <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:background="@android:color/transparent"
-            app:menu="@menu/detailed_weather_toolbar_menu"
-            />
-
-
-    <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/half_screen_size_guideline"
-            android:layout_width="match_parent"
-            android:layout_height="10dp"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.5"
-            />
-
-    <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/weather_icon_height_guideline"
-            android:layout_width="match_parent"
-            android:layout_height="10dp"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.35"
-            />
-
-    <ImageView
-            android:id="@+id/iv_weather_icon"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="@drawable/sunny"
-            android:scaleType="centerCrop"
-            android:layout_marginTop="12dp"
-            app:layout_constraintTop_toBottomOf="@id/toolbar"
-            app:layout_constraintBottom_toTopOf="@+id/weather_icon_height_guideline"
-            android:layout_marginStart="8dp"
-            app:layout_constraintStart_toStartOf="@+id/half_screen_size_guideline"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="8dp"
-            />
-
-    <LinearLayout
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            android:orientation="vertical"
-            android:layout_marginStart="8dp"
-            app:layout_constraintTop_toTopOf="@+id/iv_weather_icon"
-            android:paddingStart="@dimen/weather_detail_padding"
-            android:paddingEnd="@dimen/weather_detail_padding"
-            app:layout_constraintBottom_toTopOf="@+id/weather_icon_height_guideline"
-            android:paddingTop="12dp"
             >
 
-        <TextView
-                android:id="@+id/tv_current_temperature"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="23"
-                android:textColor="@android:color/white"
-                android:textSize="@dimen/tv_weather_details_current_temp_text_size"
+        <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:background="@android:color/transparent"
+                app:menu="@menu/detailed_weather_toolbar_menu"
                 />
 
-        <TextView
-                android:id="@+id/tv_min_max_temperature"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="24/19"
-                android:textColor="@color/weather_detail_min_max_temp_text_color"
-                android:textSize="@dimen/tv_weather_details_min_max_temp_text_size"
-                android:layout_below="@id/tv_current_temperature"
+
+        <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/half_screen_size_guideline"
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.5"
+                />
+
+        <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/weather_icon_height_guideline"
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.35"
+                />
+
+        <ImageView
+                android:id="@+id/iv_weather_icon"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/sunny"
+                android:scaleType="centerCrop"
+                android:layout_marginTop="12dp"
+                app:layout_constraintTop_toBottomOf="@id/toolbar"
+                app:layout_constraintBottom_toTopOf="@+id/weather_icon_height_guideline"
+                android:layout_marginStart="8dp"
+                app:layout_constraintStart_toStartOf="@+id/half_screen_size_guideline"
+                app:layout_constraintEnd_toEndOf="parent"
                 />
 
         <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:background="@drawable/weather_detail_city_view_background"
-                android:layout_marginTop="24dp"
-                android:padding="8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                android:orientation="vertical"
+                android:layout_marginStart="8dp"
+                app:layout_constraintTop_toTopOf="@+id/iv_weather_icon"
+                android:paddingStart="@dimen/weather_detail_padding"
+                android:paddingEnd="@dimen/weather_detail_padding"
+                app:layout_constraintBottom_toTopOf="@+id/weather_icon_height_guideline"
+                android:paddingTop="12dp"
                 >
 
-            <ImageView
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
-                    android:src="@drawable/ic_location_white"
-                    android:scaleType="centerCrop"
-                    android:layout_marginEnd="6dp"
+            <TextView
+                    android:id="@+id/tv_current_temperature"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="23"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/tv_weather_details_current_temp_text_size"
                     />
 
             <TextView
-                    android:id="@+id/tv_city"
+                    android:id="@+id/tv_min_max_temperature"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="New York"
-                    android:textSize="14sp"
-                    android:textColor="@android:color/white"
+                    android:text="24/19"
+                    android:textColor="@color/weather_detail_min_max_temp_text_color"
+                    android:textSize="@dimen/tv_weather_details_min_max_temp_text_size"
+                    android:layout_below="@id/tv_current_temperature"
                     />
+
+            <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:background="@drawable/weather_detail_city_view_background"
+                    android:layout_marginTop="24dp"
+                    android:padding="8dp"
+                    >
+
+                <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:src="@drawable/ic_location_white"
+                        android:scaleType="centerCrop"
+                        android:layout_marginEnd="6dp"
+                        />
+
+                <TextView
+                        android:id="@+id/tv_city"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="New York"
+                        android:textSize="14sp"
+                        android:textColor="@android:color/white"
+                        />
+
+            </LinearLayout>
 
         </LinearLayout>
 
-    </LinearLayout>
+        <ListView
+                android:id="@+id/lv_temperature_by_hours"
+                android:layout_width="0dp"
+                android:layout_height="100dp"
+                android:layout_margin="@dimen/weather_detail_padding"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/weather_icon_height_guideline"
+                />
 
-    <ListView
-            android:id="@+id/lv_temperature_by_hours"
-            android:layout_width="0dp"
-            android:layout_height="100dp"
-            android:layout_margin="@dimen/weather_detail_padding"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/weather_icon_height_guideline"
-            />
+        <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_temperature_on_next_days"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_margin="@dimen/weather_detail_padding"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/lv_temperature_by_hours"
+                />
 
-    <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_temperature_on_next_days"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_margin="@dimen/weather_detail_padding"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/lv_temperature_by_hours"
-            />
+        <include
+                layout="@layout/detailed_weather_information_layout_part"
+                app:layout_constraintTop_toBottomOf="@+id/rv_temperature_on_next_days"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                />
 
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
