@@ -1,10 +1,10 @@
 package com.tstv.weatherapp.data.network
 
-import androidx.lifecycle.LiveData
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.tstv.weatherapp.data.network.interceptor.ConnectivityInterceptor
 import com.tstv.weatherapp.data.network.response.CurrentWeatherResponse
-import com.tstv.weatherapp.data.network.response.FutureWeatherResponse
+import com.tstv.weatherapp.data.network.response.WeatherResponse
+import kotlinx.coroutines.Deferred
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -20,14 +20,14 @@ interface ApixuWeatherApiService {
     fun getCurrentWeather(
         @Query("q") location: String,
         @Query("lang") languageCode: String = "en"
-    ): LiveData<CurrentWeatherResponse>
+    ): Deferred<CurrentWeatherResponse>
 
     @GET("forecast.json")
     fun getFutureWeather(
         @Query("q") location: String,
-        @Query("days") days: Int,
+        @Query("days") days: Int = 5,
         @Query("lang") languageCode: String = "en"
-    ): LiveData<FutureWeatherResponse>
+    ): Deferred<WeatherResponse>
 
     companion object {
         operator fun invoke(

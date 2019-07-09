@@ -2,5 +2,5 @@
 <resources>
     <dimen name="weather_detail_padding">24dp</dimen>
     <dimen name="tv_weather_details_current_temp_text_size">54sp</dimen>
-    <dimen name="tv_weather_details_min_max_temp_text_size">24sp</dimen>
+    <dimen name="tv_weather_details_min_max_temp_text_size">18sp</dimen>
 </resources>

@@ -7,10 +7,8 @@ import okhttp3.Interceptor
 import okhttp3.Response
 
 class ConnectivityInterceptor(
-    context: Context
+    private val appContext: Context
 ): Interceptor {
-
-    private val appContext = context.applicationContext
 
 
     override fun intercept(chain: Interceptor.Chain): Response {
