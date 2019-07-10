@@ -5,14 +5,14 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.tstv.weatherapp.data.db.entity.WeatherEntry
+import com.tstv.weatherapp.data.network.response.vo.City
 import com.tstv.weatherapp.internal.LocalDateConverter
 
-@Database(entities = [WeatherEntry::class], version = 1)
+@Database(entities = [City::class], version = 1)
 @TypeConverters(LocalDateConverter::class)
 abstract class WeatherDatabase : RoomDatabase(){
 
-    abstract fun currentWeatherDao(): CurrentWeatherDao
+    abstract fun currentWeatherDao(): CitiesRecentQueriesDao
 
     companion object {
         @Volatile private var instance: WeatherDatabase? = null

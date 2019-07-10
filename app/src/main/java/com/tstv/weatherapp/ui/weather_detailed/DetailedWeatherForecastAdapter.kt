@@ -10,14 +10,15 @@ import com.tstv.weatherapp.ui.weather_detailed.view_holders.ForecastByDaysViewHo
 import com.tstv.weatherapp.ui.weather_detailed.view_holders.ForecastByHoursViewHolder
 
 class DetailedWeatherForecastAdapter(
-    private val dataList: List<IDay>
+    private val dataList: List<IDay>,
+    private val isMetricUnit: Boolean
 ): RecyclerView.Adapter<BaseViewHolder<IDay>>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<IDay> {
         return when {
-            dataList.checkItemsAre<Day>() -> ForecastByDaysViewHolder.create(parent)
-            dataList.checkItemsAre<DayHourly>() -> ForecastByHoursViewHolder.create(parent)
-            else -> ForecastByDaysViewHolder.create(parent)
+            dataList.checkItemsAre<Day>() -> ForecastByDaysViewHolder.create(parent, isMetricUnit)
+            dataList.checkItemsAre<DayHourly>() -> ForecastByHoursViewHolder.create(parent, isMetricUnit)
+            else -> ForecastByDaysViewHolder.create(parent, isMetricUnit)
         } as BaseViewHolder<IDay>
     }
 

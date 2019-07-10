@@ -1,21 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/fragment_weather_detail_day_background"
+        android:orientation="vertical"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        tools:context=".MainActivity"
         >
 
-    <FrameLayout
-            android:id="@+id/fragment_container"
+    <fragment
+            android:id="@+id/nav_host_fragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            ></FrameLayout>
+            android:name="androidx.navigation.fragment.NavHostFragment"
+            app:navGraph="@navigation/mobile_navigation"
+            app:defaultNavHost="true" />
 
-
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

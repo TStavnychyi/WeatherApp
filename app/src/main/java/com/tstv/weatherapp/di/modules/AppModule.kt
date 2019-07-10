@@ -1,10 +1,11 @@
 package com.tstv.weatherapp.di.modules
 
 import android.app.Application
-import com.tstv.weatherapp.data.db.CurrentWeatherDao
+import com.tstv.weatherapp.data.db.CitiesRecentQueriesDao
 import com.tstv.weatherapp.data.db.WeatherDatabase
 import com.tstv.weatherapp.data.network.ApixuWeatherApiService
 import com.tstv.weatherapp.data.network.interceptor.ConnectivityInterceptor
+import com.tstv.weatherapp.data.provider.UnitProvider
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -33,8 +34,14 @@ class AppModule {
 
     @Singleton
     @Provides
-    fun provideCurrentWeatherDao(weatherDb: WeatherDatabase): CurrentWeatherDao{
+    fun provideCurrentWeatherDao(weatherDb: WeatherDatabase): CitiesRecentQueriesDao{
         return weatherDb.currentWeatherDao()
+    }
+
+    @Singleton
+    @Provides
+    fun provideUnitProvider(context: Application): UnitProvider{
+        return UnitProvider(context)
     }
 
 }

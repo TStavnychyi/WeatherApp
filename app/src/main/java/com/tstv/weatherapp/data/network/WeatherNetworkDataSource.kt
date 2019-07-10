@@ -20,7 +20,7 @@ class WeatherNetworkDataSource @Inject constructor(
 //    suspend fun fetchCurrentWeather(location: String, languageCode: String) {
 //        try {
 //            val fetchedCurrentWeather = apiService
-//                .getCurrentWeather(location, languageCode)
+//                .getAllRecentQueries(location, languageCode)
 //                .await()
 //
 //            _downloadedCurrentWeather.postValue(fetchedCurrentWeather)

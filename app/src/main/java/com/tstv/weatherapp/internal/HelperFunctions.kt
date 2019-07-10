@@ -1,5 +1,7 @@
 package com.tstv.weatherapp.internal
 
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import com.tstv.weatherapp.R
 import org.threeten.bp.Instant
 import org.threeten.bp.LocalDateTime
@@ -34,4 +36,10 @@ fun formatTime(time: String): String{
         }
     result = "$result:00"
     return result
+}
+
+inline fun FragmentManager.inTransaction(func: FragmentTransaction.() -> Unit) {
+    val fragmentTransaction = beginTransaction()
+    fragmentTransaction.func()
+    fragmentTransaction.commit()
 }

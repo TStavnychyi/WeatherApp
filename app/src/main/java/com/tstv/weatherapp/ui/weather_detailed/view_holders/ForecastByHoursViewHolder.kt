@@ -18,17 +18,18 @@ import java.time.temporal.TemporalField
 import java.util.*
 
 class ForecastByHoursViewHolder (
-    private val view: View
+    private val view: View,
+    private val isMetricUnit: Boolean
 ): BaseViewHolder<DayHourly>(view) {
 
     companion object {
-        fun create(parent: ViewGroup): ForecastByHoursViewHolder {
+        fun create(parent: ViewGroup, isMetricUnit: Boolean): ForecastByHoursViewHolder {
             val view = LayoutInflater.from(parent.context)
                 .inflate(R.layout.adapter_detailed_weather_by_hour, parent, false)
 
             countItemWidth(parent, view)
 
-            return ForecastByHoursViewHolder(view)
+            return ForecastByHoursViewHolder(view, isMetricUnit)
         }
 
         private fun countItemWidth(parent: ViewGroup, view: View): View{
@@ -47,7 +48,8 @@ class ForecastByHoursViewHolder (
     private val ivWeatherIcon = view.findViewById<ImageView>(R.id.iv_weather_icon)
 
     override fun bind(item: DayHourly, adapterItemPosition: Int) {
-        tvWeatherTemperature.text = "${item.main.temp.toInt()}°"
+        val unitAbbreviation = chooseLocalizedUnitAbbreviation("°C", "°F")
+        tvWeatherTemperature.text = "${item.main.temp.toInt()}$unitAbbreviation"
         updateCurrentWeatherIcon(item.weather[0]!!.id)
         updateHour(item.dt)
     }
@@ -61,6 +63,10 @@ class ForecastByHoursViewHolder (
     private fun updateHour(date: Long?){
         val parsedDate = toOffsetDateTime(date)
         tvHour.text = formatTime(parsedDate.hour.toString())
+    }
+
+    private fun chooseLocalizedUnitAbbreviation(metric: String, imperial: String): String {
+        return if(isMetricUnit) metric else imperial
     }
 
 }

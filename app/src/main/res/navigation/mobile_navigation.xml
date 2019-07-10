@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/mobile_navigation"
+            app:startDestination="@id/searchCityActivity2">
+
+    <fragment
+            android:id="@+id/detailedWeatherFragment"
+            android:name="com.tstv.weatherapp.ui.weather_detailed.DetailedWeatherFragment"
+            android:label="DetailedWeatherFragment">
+        <action
+                android:id="@+id/action_to_settings"
+                app:destination="@id/settingsFragment"/>
+    </fragment>
+    <fragment
+            android:id="@+id/settingsFragment"
+            android:name="com.tstv.weatherapp.ui.settings.SettingsFragment"
+            android:label="SettingsFragment"/>
+    <fragment
+            android:id="@+id/searchFragment"
+            android:name="com.tstv.weatherapp.ui.SearchFragment"
+            android:label="SearchFragment"/>
+    <activity
+            android:id="@+id/searchCityActivity2"
+            android:name="com.tstv.weatherapp.ui.settings.SearchCityActivity"
+            android:label="SearchCityActivity"/>
+</navigation>
