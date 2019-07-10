@@ -2,6 +2,7 @@ package com.tstv.weatherapp
 
 import android.app.Activity
 import android.app.Application
+import com.jakewharton.threetenabp.AndroidThreeTen
 import com.tstv.weatherapp.di.AppInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector
@@ -14,7 +15,7 @@ class WeatherApp : Application(), HasActivityInjector {
 
     override fun onCreate() {
         super.onCreate()
-
+        AndroidThreeTen.init(this)
         AppInjector.init(this)
     }
 

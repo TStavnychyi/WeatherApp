@@ -1,6 +1,6 @@
 package com.tstv.weatherapp.di.modules
 
-import com.tstv.weatherapp.ui.DetailedWeatherFragment
+import com.tstv.weatherapp.ui.weather_detailed.DetailedWeatherFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 

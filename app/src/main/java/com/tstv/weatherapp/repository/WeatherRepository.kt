@@ -2,7 +2,8 @@ package com.tstv.weatherapp.repository
 
 import com.tstv.weatherapp.data.db.CurrentWeatherDao
 import com.tstv.weatherapp.data.network.ApixuWeatherApiService
-import com.tstv.weatherapp.data.network.response.WeatherResponse
+import com.tstv.weatherapp.data.network.response.ForecastHourlyResponse
+import com.tstv.weatherapp.data.network.response.ForecastResponse
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -16,9 +17,15 @@ class WeatherRepository @Inject constructor(
     private val currentWeatherDao: CurrentWeatherDao
 ){
 
-    suspend fun getWeatherAsync(location: String): Deferred<WeatherResponse> {
+    suspend fun getWeatherAsync(location: String): Deferred<ForecastResponse> {
         return withContext(Dispatchers.IO) {
-            weatherApiService.getFutureWeather(location)
+            weatherApiService.getForecast(location)
+        }
+    }
+
+    suspend fun getWeatherByHoursAsync(location: String): Deferred<ForecastHourlyResponse> {
+        return withContext(Dispatchers.IO) {
+            weatherApiService.getForecastByHour(location)
         }
     }
 }

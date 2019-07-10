@@ -3,7 +3,7 @@ package com.tstv.weatherapp.di.modules
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.tstv.weatherapp.di.keys.ViewModelKey
-import com.tstv.weatherapp.ui.DetailedWeatherViewModel
+import com.tstv.weatherapp.ui.weather_detailed.DetailedWeatherViewModel
 import com.tstv.weatherapp.view_model.WeatherViewModelFactory
 import dagger.Binds
 import dagger.Module

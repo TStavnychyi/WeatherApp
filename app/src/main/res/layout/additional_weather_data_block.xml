@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:padding="@dimen/weather_detail_padding"
+>
+
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/detailed_block_title"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:id="@+id/tv_section_title"
+            android:gravity="center_horizontal"
+    />
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp">
+
+        <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_humidity"
+                android:layout_centerVertical="true"
+                android:id="@+id/iv_humidity"
+        />
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/humidity_title"
+                android:textColor="@android:color/white"
+                android:textSize="14sp"
+                android:layout_toEndOf="@id/iv_humidity"
+                android:layout_marginStart="24dp"
+                android:layout_centerVertical="true"
+        />
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:id="@+id/tv_humidity_value"
+                android:layout_alignParentEnd="true"
+                android:layout_centerHorizontal="true"
+        />
+
+    </RelativeLayout>
+
+    <RelativeLayout android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+    >
+
+        <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_breeze"
+                android:layout_centerVertical="true"
+                android:id="@+id/iv_wind_speed"
+        />
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/wind_speed_title"
+                android:textColor="@android:color/white"
+                android:textSize="14sp"
+                android:layout_toEndOf="@id/iv_wind_speed"
+                android:layout_marginStart="24dp"
+                android:layout_centerVertical="true"
+        />
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:id="@+id/tv_wind_speed_value"
+                android:layout_alignParentEnd="true"
+                android:layout_centerHorizontal="true"
+        />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="12dp"
+    >
+
+        <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_pressure"
+                android:layout_centerVertical="true"
+                android:id="@+id/iv_pressure"
+        />
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/pressure_title"
+                android:textColor="@android:color/white"
+                android:textSize="14sp"
+                android:layout_toEndOf="@id/iv_pressure"
+                android:layout_marginStart="24dp"
+                android:layout_centerVertical="true"
+        />
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:id="@+id/tv_pressure_value"
+                android:layout_alignParentEnd="true"
+                android:layout_centerHorizontal="true"
+        />
+
+    </RelativeLayout>
+
+</LinearLayout>

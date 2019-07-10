@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">WeatherApp</string>
     <string name="fragment_search_city_title">Get weather information from...</string>
+    <string name="detailed_block_title">DETAILED</string>
+    <string name="humidity_title">Humidity</string>
+    <string name="wind_speed_title">Wind speed</string>
+    <string name="pressure_title">Pressure</string>
+    <string name="progress_bar_loading_text">Loading</string>
 </resources>

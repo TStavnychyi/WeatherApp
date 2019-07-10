@@ -2,8 +2,8 @@ package com.tstv.weatherapp.data.network
 
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.tstv.weatherapp.data.network.interceptor.ConnectivityInterceptor
-import com.tstv.weatherapp.data.network.response.CurrentWeatherResponse
-import com.tstv.weatherapp.data.network.response.WeatherResponse
+import com.tstv.weatherapp.data.network.response.ForecastHourlyResponse
+import com.tstv.weatherapp.data.network.response.ForecastResponse
 import kotlinx.coroutines.Deferred
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -12,22 +12,23 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-const val API_KEY = "aee9389451ad428ca76193934171409"
+//const val API_KEY = "aee9389451ad428ca76193934171409"
+const val API_KEY = "433a283bd3d004656b0f52e2c566cfc9"
 
 interface ApixuWeatherApiService {
 
-    @GET("current.json")
-    fun getCurrentWeather(
+    @GET("forecast/daily")
+    fun getForecast(
         @Query("q") location: String,
-        @Query("lang") languageCode: String = "en"
-    ): Deferred<CurrentWeatherResponse>
+        @Query("units") units: String = "metric"
+    ): Deferred<ForecastResponse>
 
-    @GET("forecast.json")
-    fun getFutureWeather(
+    @GET("forecast")
+    fun getForecastByHour(
         @Query("q") location: String,
-        @Query("days") days: Int = 5,
-        @Query("lang") languageCode: String = "en"
-    ): Deferred<WeatherResponse>
+        @Query("units") units: String = "metric",
+        @Query("cnt") resultLimit: Int = 6
+    ): Deferred<ForecastHourlyResponse>
 
     companion object {
         operator fun invoke(
@@ -37,7 +38,7 @@ interface ApixuWeatherApiService {
                 val url = chain.request()
                     .url()
                     .newBuilder()
-                    .addQueryParameter("key", API_KEY)
+                    .addQueryParameter("APPID", API_KEY)
                     .build()
 
                 val request = chain.request()
@@ -55,7 +56,7 @@ interface ApixuWeatherApiService {
 
             return Retrofit.Builder()
                 .client(okHttpClient)
-                .baseUrl("https://api.apixu.com/v1/")
+                .baseUrl("http://api.openweathermap.org/data/2.5/")
                 .addCallAdapterFactory(CoroutineCallAdapterFactory())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
