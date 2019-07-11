@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/mobile_navigation"
-            app:startDestination="@id/searchCityActivity2">
+            app:startDestination="@id/detailedWeatherFragment">
 
     <fragment
             android:id="@+id/detailedWeatherFragment"
