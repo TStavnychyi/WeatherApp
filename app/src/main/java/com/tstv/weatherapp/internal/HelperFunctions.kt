@@ -1,5 +1,7 @@
 package com.tstv.weatherapp.internal
 
+import android.content.Context
+import android.net.ConnectivityManager
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.tstv.weatherapp.R
@@ -45,9 +47,8 @@ fun formatMinutes(minutes: String): String{
     return result
 }
 
-
-inline fun FragmentManager.inTransaction(func: FragmentTransaction.() -> Unit) {
-    val fragmentTransaction = beginTransaction()
-    fragmentTransaction.func()
-    fragmentTransaction.commit()
+fun isInternetConnection(appContext: Context): Boolean {
+    val connectivityManager = appContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    val networkInfo = connectivityManager.activeNetworkInfo
+    return networkInfo != null && networkInfo.isConnected
 }

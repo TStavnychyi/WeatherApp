@@ -10,7 +10,9 @@
             android:label="DetailedWeatherFragment">
         <action
                 android:id="@+id/action_to_settings"
-                app:destination="@id/settingsFragment"/>
+                app:destination="@id/settingsFragment"
+                app:enterAnim="@anim/fragment_slide_in_right"
+                />
         <argument android:name="arg_city_name" app:argType="string"/>
         <argument android:name="arg_date" app:argType="long" android:defaultValue="-1L"/>
     </fragment>
@@ -22,7 +24,9 @@
             android:id="@+id/searchFragment"
             android:name="com.tstv.weatherapp.ui.search_city.SearchFragment"
             android:label="SearchFragment">
-        <action android:id="@+id/action_searchFragment_to_detailedWeatherFragment"
-                app:destination="@id/detailedWeatherFragment"/>
+        <action
+                android:id="@+id/action_searchFragment_to_detailedWeatherFragment"
+                app:destination="@id/detailedWeatherFragment"
+                />
     </fragment>
 </navigation>

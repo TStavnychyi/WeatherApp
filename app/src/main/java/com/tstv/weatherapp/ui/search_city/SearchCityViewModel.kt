@@ -13,8 +13,12 @@ class SearchCityViewModel @Inject constructor(
 ) : ViewModel() {
 
     fun addRecentQuery(query: String){
-        val city = City(name = query.trim())
+        val city = City(name = query.trim().toLowerCase().capitalize())
         viewModelScope.launch {
+            if(recentQueries.value?.size == 10){
+                val queryToRemove = recentQueries.value!!.elementAt(0)
+                removeRecentQuery(queryToRemove)
+            }
             repository.addRecentQuery(city)
         }
     }
@@ -29,12 +33,17 @@ class SearchCityViewModel @Inject constructor(
     val recentQueries: MutableLiveData<Set<String>>
         get() = _recentQueries
 
-    fun getRecentQueris(){
+    fun getRecentQueries(){
         viewModelScope.launch {
             val recentQueriesFromDb = repository.getRecentQueries()
             val queries = recentQueriesFromDb.map { it.name }.toSet()
             _recentQueries.postValue(queries)
         }
+    }
+
+    fun validateQuery(query: String): Boolean{
+        val regex = Regex("^([a-zA-Z\\u0080-\\u024F]+(?:. |-| |'))*[a-zA-Z\\u0080-\\u024F]*\$")
+        return query.matches(regex)
     }
 
 }

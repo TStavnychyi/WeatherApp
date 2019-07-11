@@ -9,5 +9,8 @@ data class ForecastResponse(
     val cnt: Int?,
     val cod: String,
     val list: List<Day>,
-    val message: Double?
-)
+    val message: Double?,
+    var error: Throwable
+){
+    constructor(error: Throwable): this(City(null, ""), null, "", listOf<Day>(), null, error)
+}

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
@@ -21,6 +22,7 @@ import com.tstv.weatherapp.ui.base.ScopedFragment
 import kotlinx.android.synthetic.main.additional_weather_data_block.*
 import kotlinx.android.synthetic.main.fragment_weather_detail_layout.*
 import kotlinx.coroutines.launch
+import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.TextStyle
 import java.util.*
 import javax.inject.Inject
@@ -37,11 +39,6 @@ class DetailedWeatherFragment : ScopedFragment(), Injectable {
 
     @Volatile private var isLoadingFinished = false
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        sharedElementEnterTransition = initFragmentTransition()
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_weather_detail_layout, container, false)
 
@@ -52,7 +49,13 @@ class DetailedWeatherFragment : ScopedFragment(), Injectable {
         viewModel = ViewModelProviders.of(this@DetailedWeatherFragment, viewModelFactory).get(DetailedWeatherViewModel::class.java)
 
         val argsCityName = arguments?.let { DetailedWeatherFragmentArgs.fromBundle(it) }
-        bindUI(argsCityName?.argCityName!!)
+
+        if (isInternetConnection(context?.applicationContext!!)){
+            bindUI(argsCityName?.argCityName!!)
+        }else{
+            showNoInternetView()
+        }
+
     }
 
     private fun bindUI(cityName: String) = launch{
@@ -74,7 +77,7 @@ class DetailedWeatherFragment : ScopedFragment(), Injectable {
                 updateTemperatures(day, min, max)
             }
             updateCurrentWeatherIcon(weather.weather[0]?.id)
-            updateCurrentDate(weather.dt)
+            updateCurrentDate()
             updateLocation(it.city.name)
             updateAdditionalWeatherData(weather.humidity, weather.speed, weather.pressure)
             initForecastByDaysRecyclerView(it.list.drop(1))
@@ -89,12 +92,17 @@ class DetailedWeatherFragment : ScopedFragment(), Injectable {
         })
 
         lastUnitSystem = viewModel.getUnitSystem()
+
+        root_view.setOnRefreshListener {
+            viewModel.retry(cityName, viewModel.getUnitSystem())
+        }
     }
 
     @SuppressLint("SetTextI18n")
     private fun updateTemperatures(currentTemp: Double, minTemp: Double, maxTemp: Double){
         val unitAbbreviation = chooseLocalizedUnitAbbreviation("°C", "°F")
         tv_current_temperature.text = "${currentTemp.toInt()}$unitAbbreviation"
+        tv_current_temperature.setTextColor(activity?.getColor(viewModel.getTextColorFromTemperature(currentTemp.toInt(), viewModel.getUnitSystem()))!!)
         tv_min_max.text = "${maxTemp.toInt()}$unitAbbreviation / ${minTemp.toInt()}$unitAbbreviation"
     }
 
@@ -136,8 +144,8 @@ class DetailedWeatherFragment : ScopedFragment(), Injectable {
     }
 
     @SuppressLint("SetTextI18n")
-    private fun updateCurrentDate(date: Long?){
-        val parsedDate = toOffsetDateTime(date)
+    private fun updateCurrentDate(){
+        val parsedDate = LocalDateTime.now()
 
         with(parsedDate){
             val dayName = dayOfWeek.getDisplayName(TextStyle.FULL, Locale.ENGLISH).capitalize()
@@ -151,11 +159,11 @@ class DetailedWeatherFragment : ScopedFragment(), Injectable {
         if(isLoadingFinished) {
             weather_group_loading_bar.visibility = View.GONE
 
-            ll_additional_weather_data.visibility = View.VISIBLE
-            ll_weather_main_info.visibility = View.VISIBLE
-            rv_temperature_by_hours.visibility = View.VISIBLE
-            rv_temperature_on_next_days.visibility = View.VISIBLE
-            ll_location_view.visibility = View.VISIBLE
+            if(root_view.isRefreshing)
+                root_view.isRefreshing = false
+            showOrHideContentViews(true)
+            animateWeatherIcon()
+            animateContentViews()
         }
         isLoadingFinished = true
     }
@@ -193,6 +201,52 @@ class DetailedWeatherFragment : ScopedFragment(), Injectable {
         findNavController().navigate(direction)
     }
 
-    private fun initFragmentTransition() = TransitionInflater.from(context).inflateTransition(android.R.transition.fade)
+    private fun showNoInternetView(){
+        showOrHideContentViews(false)
+        weather_group_loading_bar.visibility = View.GONE
+        no_internet_connection_view.visibility = View.VISIBLE
+    }
+
+    private fun showOrHideContentViews(show: Boolean){
+        val visibilityId = if(show) View.VISIBLE else View.GONE
+
+        ll_additional_weather_data.visibility = visibilityId
+        ll_weather_main_info.visibility = visibilityId
+        rv_temperature_by_hours.visibility = visibilityId
+        rv_temperature_on_next_days.visibility = visibilityId
+        ll_location_view.visibility = visibilityId
+    }
+
+    private fun animateWeatherIcon(){
+        val animFadeIn = AnimationUtils.loadAnimation(context!!, R.anim.slide_in_right)
+
+        animFadeIn.reset()
+        iv_weather_icon.clearAnimation()
+        iv_weather_icon.startAnimation(animFadeIn)
+    }
+
+    private fun animateContentViews(){
+        val animFadeOut = AnimationUtils.loadAnimation(context!!, R.anim.fade_in)
+
+        animFadeOut.reset()
+        ll_additional_weather_data.clearAnimation()
+        ll_additional_weather_data.startAnimation(animFadeOut)
+
+        animFadeOut.reset()
+        ll_weather_main_info.clearAnimation()
+        ll_weather_main_info.startAnimation(animFadeOut)
+
+        animFadeOut.reset()
+        rv_temperature_by_hours.clearAnimation()
+        rv_temperature_by_hours.startAnimation(animFadeOut)
+
+        animFadeOut.reset()
+        rv_temperature_on_next_days.clearAnimation()
+        rv_temperature_on_next_days.startAnimation(animFadeOut)
+
+        animFadeOut.reset()
+        ll_location_view.clearAnimation()
+        ll_location_view.startAnimation(animFadeOut)
+    }
 
 }

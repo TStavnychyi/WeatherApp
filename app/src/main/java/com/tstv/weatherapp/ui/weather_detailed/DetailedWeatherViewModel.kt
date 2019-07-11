@@ -4,12 +4,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.tstv.weatherapp.R
 import com.tstv.weatherapp.data.network.response.ForecastHourlyResponse
 import com.tstv.weatherapp.data.network.response.ForecastResponse
 import com.tstv.weatherapp.data.provider.UnitProvider
 import com.tstv.weatherapp.internal.UnitSystem
 import com.tstv.weatherapp.internal.UnitSystem.*
 import com.tstv.weatherapp.repository.WeatherRepository
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import org.threeten.bp.LocalTime
 import javax.inject.Inject
@@ -30,13 +33,13 @@ class DetailedWeatherViewModel @Inject constructor(
 
     fun loadWeather(location: String, units: UnitSystem = METRIC){
         viewModelScope.launch {
-            _weather.postValue(weatherRepository.getWeatherAsync(location, units).await())
+            _weather.postValue(weatherRepository.getWeatherAsync(location, units))
         }
     }
 
     fun loadWeatherByHour(location: String, units: UnitSystem = METRIC){
         viewModelScope.launch {
-            _weatherByHour.postValue(weatherRepository.getWeatherByHoursAsync(location, units).await())
+            _weatherByHour.postValue(weatherRepository.getWeatherByHoursAsync(location, units))
         }
     }
 
@@ -49,4 +52,28 @@ class DetailedWeatherViewModel @Inject constructor(
 
     val isMetricUnit: Boolean
         get() = getUnitSystem() == METRIC
+
+    fun retry(location: String, units: UnitSystem = METRIC){
+        if(viewModelScope.isActive) {
+            loadWeather(location, units)
+            loadWeatherByHour(location, units)
+        }
+    }
+
+    fun getTextColorFromTemperature(temperature: Int, units: UnitSystem): Int{
+        return if(units == METRIC){
+            when {
+                temperature < 10 -> R.color.temperature_cold
+                temperature in 10..20 -> R.color.temperature_medium
+                else -> R.color.temperature_hot
+            }
+        }else{
+            when {
+                temperature < 50 -> R.color.temperature_cold
+                temperature in 50..68 -> R.color.temperature_medium
+                else -> R.color.temperature_hot
+            }
+        }
+    }
+
 }
