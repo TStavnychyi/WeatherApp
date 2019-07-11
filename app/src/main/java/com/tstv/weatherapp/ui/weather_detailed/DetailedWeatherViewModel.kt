@@ -8,6 +8,7 @@ import com.tstv.weatherapp.data.network.response.ForecastHourlyResponse
 import com.tstv.weatherapp.data.network.response.ForecastResponse
 import com.tstv.weatherapp.data.provider.UnitProvider
 import com.tstv.weatherapp.internal.UnitSystem
+import com.tstv.weatherapp.internal.UnitSystem.*
 import com.tstv.weatherapp.repository.WeatherRepository
 import kotlinx.coroutines.launch
 import org.threeten.bp.LocalTime
@@ -27,15 +28,15 @@ class DetailedWeatherViewModel @Inject constructor(
         get() = _weatherByHour
 
 
-    fun loadWeather(location: String){
+    fun loadWeather(location: String, units: UnitSystem = METRIC){
         viewModelScope.launch {
-            _weather.postValue(weatherRepository.getWeatherAsync(location).await())
+            _weather.postValue(weatherRepository.getWeatherAsync(location, units).await())
         }
     }
 
-    fun loadWeatherByHour(location: String){
+    fun loadWeatherByHour(location: String, units: UnitSystem = METRIC){
         viewModelScope.launch {
-            _weatherByHour.postValue(weatherRepository.getWeatherByHoursAsync(location).await())
+            _weatherByHour.postValue(weatherRepository.getWeatherByHoursAsync(location, units).await())
         }
     }
 
@@ -44,8 +45,8 @@ class DetailedWeatherViewModel @Inject constructor(
         return localTime.hour in 6..22
     }
 
-    fun getMetricUnit() = unitProvider.getUnitSystem()
+    fun getUnitSystem() = unitProvider.getUnitSystem()
 
     val isMetricUnit: Boolean
-        get() = getMetricUnit() == UnitSystem.METRIC
+        get() = getUnitSystem() == METRIC
 }

@@ -8,14 +8,10 @@ import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.tstv.weatherapp.R
 import com.tstv.weatherapp.data.network.response.vo.DayHourly
-import com.tstv.weatherapp.internal.formatTime
+import com.tstv.weatherapp.internal.formatHour
 import com.tstv.weatherapp.internal.getWeatherIconFromStatus
 import com.tstv.weatherapp.internal.toOffsetDateTime
 import com.tstv.weatherapp.ui.base.BaseViewHolder
-import org.threeten.bp.OffsetDateTime
-import org.threeten.bp.temporal.WeekFields
-import java.time.temporal.TemporalField
-import java.util.*
 
 class ForecastByHoursViewHolder (
     private val view: View,
@@ -62,7 +58,7 @@ class ForecastByHoursViewHolder (
 
     private fun updateHour(date: Long?){
         val parsedDate = toOffsetDateTime(date)
-        tvHour.text = formatTime(parsedDate.hour.toString())
+        tvHour.text = "${formatHour(parsedDate.hour.toString())}:00"
     }
 
     private fun chooseLocalizedUnitAbbreviation(metric: String, imperial: String): String {

@@ -12,7 +12,7 @@ import com.tstv.weatherapp.internal.LocalDateConverter
 @TypeConverters(LocalDateConverter::class)
 abstract class WeatherDatabase : RoomDatabase(){
 
-    abstract fun currentWeatherDao(): CitiesRecentQueriesDao
+    abstract fun currentWeatherDao(): SearchCityRecentQueriesDao
 
     companion object {
         @Volatile private var instance: WeatherDatabase? = null

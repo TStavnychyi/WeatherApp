@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "cities_recent_queries")
 data class City(
     @PrimaryKey(autoGenerate = true)
-    val id: Int?,
+    val id: Int? = null,
     val name: String
 ){
 }

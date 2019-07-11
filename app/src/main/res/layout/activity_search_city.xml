@@ -32,7 +32,7 @@
             />
 
     <AutoCompleteTextView
-            android:id="@+id/et_auto_complete"
+            android:id="@+id/et_auto_complete123"
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:dropDownHeight="150dp"
@@ -58,8 +58,8 @@
             android:layout_gravity="end|center_vertical"
             android:background="@drawable/ic_clear"
             android:scaleType="centerCrop"
-            app:layout_constraintTop_toTopOf="@+id/et_auto_complete"
-            app:layout_constraintBottom_toBottomOf="@+id/et_auto_complete"
+            app:layout_constraintTop_toTopOf="@+id/et_auto_complete123"
+            app:layout_constraintBottom_toBottomOf="@+id/et_auto_complete123"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="8dp"
             />

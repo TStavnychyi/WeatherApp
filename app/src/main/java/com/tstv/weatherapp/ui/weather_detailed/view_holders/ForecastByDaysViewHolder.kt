@@ -1,17 +1,20 @@
 package com.tstv.weatherapp.ui.weather_detailed.view_holders
 
 import android.annotation.SuppressLint
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.navigation.Navigation
 import com.bumptech.glide.Glide
 import com.tstv.weatherapp.R
 import com.tstv.weatherapp.data.network.response.vo.Day
 import com.tstv.weatherapp.internal.getWeatherIconFromStatus
 import com.tstv.weatherapp.internal.toOffsetDateTime
 import com.tstv.weatherapp.ui.base.BaseViewHolder
+import com.tstv.weatherapp.ui.weather_detailed.DetailedWeatherFragmentDirections
 import kotlinx.android.synthetic.main.fragment_weather_detail_layout.*
 import org.threeten.bp.format.TextStyle
 import org.threeten.bp.temporal.WeekFields
@@ -20,7 +23,7 @@ import java.util.*
 class ForecastByDaysViewHolder(
     private val view: View,
     private val isMetricUnit: Boolean
-): BaseViewHolder<Day>(view) {
+): BaseViewHolder<Day>(view), View.OnClickListener {
 
     companion object{
         fun create(parent: ViewGroup, isMetricUnit: Boolean): ForecastByDaysViewHolder {
@@ -35,10 +38,13 @@ class ForecastByDaysViewHolder(
     private val tvMaxTemperature = view.findViewById<TextView>(R.id.tv_max_temperature)
     private val ivWeatherIcon = view.findViewById<ImageView>(R.id.iv_weather_icon)
 
+    private lateinit var weatherObj: Day
+
     @SuppressLint("SetTextI18n")
     override fun bind(item: Day, adapterItemPosition: Int) {
+        weatherObj = item
         val unitAbbreviation = chooseLocalizedUnitAbbreviation("°C", "°F")
-        tvMinTemperature.text = "/${item.temp.min.toInt()}$unitAbbreviation"
+        tvMinTemperature.text = " / ${item.temp.min.toInt()}$unitAbbreviation"
         tvMaxTemperature.text = "${item.temp.max.toInt()}$unitAbbreviation"
         updateCurrentWeatherIcon(item.weather[0]!!.id)
         updateDate(item.dt)
@@ -58,5 +64,9 @@ class ForecastByDaysViewHolder(
 
     private fun chooseLocalizedUnitAbbreviation(metric: String, imperial: String): String {
         return if(isMetricUnit) metric else imperial
+    }
+
+    override fun onClick(v: View?) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }

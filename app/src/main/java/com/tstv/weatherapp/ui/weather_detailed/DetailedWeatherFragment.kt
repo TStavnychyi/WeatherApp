@@ -5,24 +5,24 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.fragment.NavHostFragment.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.transition.TransitionInflater
 import com.bumptech.glide.Glide
 import com.tstv.weatherapp.R
 import com.tstv.weatherapp.data.network.response.vo.Day
 import com.tstv.weatherapp.data.network.response.vo.DayHourly
 import com.tstv.weatherapp.di.Injectable
-import com.tstv.weatherapp.internal.UnitSystem
-import com.tstv.weatherapp.internal.getWeatherIconFromStatus
+import com.tstv.weatherapp.internal.*
 import com.tstv.weatherapp.ui.base.ScopedFragment
 import kotlinx.android.synthetic.main.additional_weather_data_block.*
 import kotlinx.android.synthetic.main.fragment_weather_detail_layout.*
 import kotlinx.coroutines.launch
+import org.threeten.bp.format.TextStyle
+import java.util.*
 import javax.inject.Inject
 import kotlin.math.roundToInt
 
@@ -31,11 +31,16 @@ class DetailedWeatherFragment : ScopedFragment(), Injectable {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    lateinit var viewModel: DetailedWeatherViewModel
+    private lateinit var viewModel: DetailedWeatherViewModel
 
     private var lastUnitSystem: UnitSystem? = null
 
     @Volatile private var isLoadingFinished = false
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        sharedElementEnterTransition = initFragmentTransition()
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_weather_detail_layout, container, false)
@@ -46,13 +51,14 @@ class DetailedWeatherFragment : ScopedFragment(), Injectable {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         viewModel = ViewModelProviders.of(this@DetailedWeatherFragment, viewModelFactory).get(DetailedWeatherViewModel::class.java)
 
-        bindUI()
+        val argsCityName = arguments?.let { DetailedWeatherFragmentArgs.fromBundle(it) }
+        bindUI(argsCityName?.argCityName!!)
     }
 
-    private fun bindUI() = launch{
-        if(lastUnitSystem == null || lastUnitSystem != viewModel.getMetricUnit()) {
-            viewModel.loadWeather("Gliwice")
-            viewModel.loadWeatherByHour("Gliwice")
+    private fun bindUI(cityName: String) = launch{
+        if(lastUnitSystem == null || lastUnitSystem != viewModel.getUnitSystem()) {
+            viewModel.loadWeather(cityName, viewModel.getUnitSystem())
+            viewModel.loadWeatherByHour(cityName, viewModel.getUnitSystem())
         }
 
         initToolbar()
@@ -68,6 +74,7 @@ class DetailedWeatherFragment : ScopedFragment(), Injectable {
                 updateTemperatures(day, min, max)
             }
             updateCurrentWeatherIcon(weather.weather[0]?.id)
+            updateCurrentDate(weather.dt)
             updateLocation(it.city.name)
             updateAdditionalWeatherData(weather.humidity, weather.speed, weather.pressure)
             initForecastByDaysRecyclerView(it.list.drop(1))
@@ -81,14 +88,14 @@ class DetailedWeatherFragment : ScopedFragment(), Injectable {
             hideLoadingViewAndShowContentViews()
         })
 
-        lastUnitSystem = viewModel.getMetricUnit()
+        lastUnitSystem = viewModel.getUnitSystem()
     }
 
     @SuppressLint("SetTextI18n")
     private fun updateTemperatures(currentTemp: Double, minTemp: Double, maxTemp: Double){
         val unitAbbreviation = chooseLocalizedUnitAbbreviation("°C", "°F")
         tv_current_temperature.text = "${currentTemp.toInt()}$unitAbbreviation"
-        tv_min_max.text = "${maxTemp.toInt()}$unitAbbreviation/${minTemp.toInt()}$unitAbbreviation"
+        tv_min_max.text = "${maxTemp.toInt()}$unitAbbreviation / ${minTemp.toInt()}$unitAbbreviation"
     }
 
     private fun updateLocation(location: String){
@@ -126,6 +133,18 @@ class DetailedWeatherFragment : ScopedFragment(), Injectable {
         Glide.with(this@DetailedWeatherFragment)
             .load(getWeatherIconFromStatus(id!!.toString()))
             .into(iv_weather_icon)
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun updateCurrentDate(date: Long?){
+        val parsedDate = toOffsetDateTime(date)
+
+        with(parsedDate){
+            val dayName = dayOfWeek.getDisplayName(TextStyle.FULL, Locale.ENGLISH).capitalize()
+            val monthName = month.getDisplayName(TextStyle.FULL, Locale.ENGLISH).capitalize()
+            val time = "${formatHour(hour.toString())}:${formatMinutes(minute.toString())}"
+            tv_current_date.text = "$dayName, $dayOfMonth $monthName $time"
+        }
     }
 
     private fun hideLoadingViewAndShowContentViews(){
@@ -173,4 +192,7 @@ class DetailedWeatherFragment : ScopedFragment(), Injectable {
         val direction = DetailedWeatherFragmentDirections.actionToSettings()
         findNavController().navigate(direction)
     }
+
+    private fun initFragmentTransition() = TransitionInflater.from(context).inflateTransition(android.R.transition.fade)
+
 }

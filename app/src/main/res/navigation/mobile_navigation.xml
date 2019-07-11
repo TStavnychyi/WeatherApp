@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/mobile_navigation"
-            app:startDestination="@id/detailedWeatherFragment">
+            app:startDestination="@id/searchFragment">
 
     <fragment
             android:id="@+id/detailedWeatherFragment"
@@ -11,6 +11,8 @@
         <action
                 android:id="@+id/action_to_settings"
                 app:destination="@id/settingsFragment"/>
+        <argument android:name="arg_city_name" app:argType="string"/>
+        <argument android:name="arg_date" app:argType="long" android:defaultValue="-1L"/>
     </fragment>
     <fragment
             android:id="@+id/settingsFragment"
@@ -18,10 +20,9 @@
             android:label="SettingsFragment"/>
     <fragment
             android:id="@+id/searchFragment"
-            android:name="com.tstv.weatherapp.ui.SearchFragment"
-            android:label="SearchFragment"/>
-    <activity
-            android:id="@+id/searchCityActivity2"
-            android:name="com.tstv.weatherapp.ui.settings.SearchCityActivity"
-            android:label="SearchCityActivity"/>
+            android:name="com.tstv.weatherapp.ui.search_city.SearchFragment"
+            android:label="SearchFragment">
+        <action android:id="@+id/action_searchFragment_to_detailedWeatherFragment"
+                app:destination="@id/detailedWeatherFragment"/>
+    </fragment>
 </navigation>

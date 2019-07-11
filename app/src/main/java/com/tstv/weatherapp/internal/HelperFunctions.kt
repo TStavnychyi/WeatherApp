@@ -29,14 +29,22 @@ fun toOffsetDateTime(millis: Long?): LocalDateTime {
     return LocalDateTime.ofInstant(Instant.ofEpochSecond(millis!!), ZoneId.systemDefault())
 }
 
-fun formatTime(time: String): String{
+fun formatHour(time: String): String{
     var result = time
         if(time.length == 1){
             result = "0$time"
         }
-    result = "$result:00"
     return result
 }
+
+fun formatMinutes(minutes: String): String{
+    var result = minutes
+    if(minutes.length == 1){
+        result = "0$minutes"
+    }
+    return result
+}
+
 
 inline fun FragmentManager.inTransaction(func: FragmentTransaction.() -> Unit) {
     val fragmentTransaction = beginTransaction()
