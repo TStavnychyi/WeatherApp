@@ -11,8 +11,7 @@
         <action
                 android:id="@+id/action_to_settings"
                 app:destination="@id/settingsFragment"
-                app:enterAnim="@anim/fragment_slide_in_right"
-                />
+                app:enterAnim="@anim/nav_default_pop_enter_anim"/>
         <argument android:name="arg_city_name" app:argType="string"/>
         <argument android:name="arg_date" app:argType="long" android:defaultValue="-1L"/>
     </fragment>
