@@ -1,8 +1,9 @@
-package com.tstv.weatherapp
+package com.tstv.weatherapp.ui.base
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.tstv.weatherapp.R
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
 import javax.inject.Inject
