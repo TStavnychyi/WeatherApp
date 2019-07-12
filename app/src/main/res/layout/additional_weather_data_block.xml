@@ -10,8 +10,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/detailed_block_title"
+            android:textAllCaps="true"
             android:textColor="@android:color/white"
-            android:textSize="18sp"
+            android:textSize="@dimen/secondary_text_size"
             android:id="@+id/tv_section_title"
             android:gravity="center_horizontal"
     />
