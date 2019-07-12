@@ -22,15 +22,17 @@ import com.tstv.weatherapp.internal.UnitSystem
 import com.tstv.weatherapp.internal.formatHour
 import com.tstv.weatherapp.internal.formatMinutes
 import com.tstv.weatherapp.internal.getWeatherIconFromStatus
+import com.tstv.weatherapp.ui.base.ScopedFragment
 import kotlinx.android.synthetic.main.additional_weather_data_block.*
 import kotlinx.android.synthetic.main.fragment_weather_detail_layout.*
+import kotlinx.coroutines.launch
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.TextStyle
 import java.util.*
 import javax.inject.Inject
 import kotlin.math.roundToInt
 
-class DetailedWeatherFragment : Fragment(), Injectable {
+class DetailedWeatherFragment : ScopedFragment(), Injectable {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -59,7 +61,7 @@ class DetailedWeatherFragment : Fragment(), Injectable {
 
     }
 
-    private fun bindUI(cityName: String) {
+    private fun bindUI(cityName: String) = launch {
         if(lastUnitSystem == null || lastUnitSystem != viewModel.getUnitSystem()) {
             viewModel.loadWeather(cityName, viewModel.getUnitSystem())
             viewModel.loadWeatherByHour(cityName, viewModel.getUnitSystem())
