@@ -39,7 +39,7 @@
             android:textCursorDrawable="@null"
             android:textColor="@android:color/white"
             android:textColorHint="@android:color/darker_gray"
-            android:inputType="textAutoComplete|textAutoCorrect"
+            android:inputType="textAutoComplete|textAutoCorrect|textCapWords"
             android:dropDownWidth="wrap_content"
             android:dropDownHeight="135dp"
             android:dropDownVerticalOffset="5dp"

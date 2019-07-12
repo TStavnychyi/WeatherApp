@@ -59,7 +59,6 @@ class SearchFragment : Fragment(), Injectable {
         adapter = ArrayAdapter(context!!, android.R.layout.simple_dropdown_item_1line, recentQueries.toList())
         et_auto_complete.setAdapter(adapter)
         et_auto_complete.setOnClickListener {
-            val widrh= et_auto_complete.dropDownWidth
             if(recentQueries.isNotEmpty())
                 et_auto_complete.showDropDown()
         }
@@ -99,7 +98,7 @@ class SearchFragment : Fragment(), Injectable {
     }
 
     private fun openKeyboard(){
-        activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+        activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
     }
 
     private fun hideKeyboard(){

@@ -6,29 +6,31 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.transition.TransitionInflater
 import com.bumptech.glide.Glide
 import com.tstv.weatherapp.R
 import com.tstv.weatherapp.data.network.response.vo.Day
 import com.tstv.weatherapp.data.network.response.vo.DayHourly
+import com.tstv.weatherapp.data.network.response.vo.ErrorStatus
 import com.tstv.weatherapp.di.Injectable
-import com.tstv.weatherapp.internal.*
-import com.tstv.weatherapp.ui.base.ScopedFragment
+import com.tstv.weatherapp.internal.UnitSystem
+import com.tstv.weatherapp.internal.formatHour
+import com.tstv.weatherapp.internal.formatMinutes
+import com.tstv.weatherapp.internal.getWeatherIconFromStatus
 import kotlinx.android.synthetic.main.additional_weather_data_block.*
 import kotlinx.android.synthetic.main.fragment_weather_detail_layout.*
-import kotlinx.coroutines.launch
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.TextStyle
 import java.util.*
 import javax.inject.Inject
 import kotlin.math.roundToInt
 
-class DetailedWeatherFragment : ScopedFragment(), Injectable {
+class DetailedWeatherFragment : Fragment(), Injectable {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -38,6 +40,8 @@ class DetailedWeatherFragment : ScopedFragment(), Injectable {
     private var lastUnitSystem: UnitSystem? = null
 
     @Volatile private var isLoadingFinished = false
+
+    private var cityName: String = ""
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_weather_detail_layout, container, false)
@@ -49,16 +53,13 @@ class DetailedWeatherFragment : ScopedFragment(), Injectable {
         viewModel = ViewModelProviders.of(this@DetailedWeatherFragment, viewModelFactory).get(DetailedWeatherViewModel::class.java)
 
         val argsCityName = arguments?.let { DetailedWeatherFragmentArgs.fromBundle(it) }
+        cityName = argsCityName?.argCityName!!
 
-        if (isInternetConnection(context?.applicationContext!!)){
-            bindUI(argsCityName?.argCityName!!)
-        }else{
-            showNoInternetView()
-        }
+        bindUI(cityName)
 
     }
 
-    private fun bindUI(cityName: String) = launch{
+    private fun bindUI(cityName: String) {
         if(lastUnitSystem == null || lastUnitSystem != viewModel.getUnitSystem()) {
             viewModel.loadWeather(cityName, viewModel.getUnitSystem())
             viewModel.loadWeatherByHour(cityName, viewModel.getUnitSystem())
@@ -71,6 +72,10 @@ class DetailedWeatherFragment : ScopedFragment(), Injectable {
 
         currentWeather.observe(this@DetailedWeatherFragment, Observer {
             if(it == null) return@Observer
+            if(it.error != null){
+                handleError(it.error!!)
+                return@Observer
+            }
 
             val weather = it.list[0]
             with(weather.temp){
@@ -86,6 +91,10 @@ class DetailedWeatherFragment : ScopedFragment(), Injectable {
         })
         weatherByHour.observe(this@DetailedWeatherFragment, Observer {
             if(it == null) return@Observer
+            if(it.error != null){
+                handleError(it.error!!)
+                return@Observer
+            }
             initForecastByHoursRecyclerView(it.list)
             setLayoutBackgroundColorDependsOnTime()
             hideLoadingViewAndShowContentViews()
@@ -94,6 +103,8 @@ class DetailedWeatherFragment : ScopedFragment(), Injectable {
         lastUnitSystem = viewModel.getUnitSystem()
 
         root_view.setOnRefreshListener {
+            ll_no_internet_connection_view.visibility = View.GONE
+
             viewModel.retry(cityName, viewModel.getUnitSystem())
         }
     }
@@ -158,10 +169,11 @@ class DetailedWeatherFragment : ScopedFragment(), Injectable {
     private fun hideLoadingViewAndShowContentViews(){
         if(isLoadingFinished) {
             weather_group_loading_bar.visibility = View.GONE
+            ll_no_internet_connection_view.visibility = View.GONE
 
             if(root_view.isRefreshing)
                 root_view.isRefreshing = false
-            showOrHideContentViews(true)
+            showContentViews(true)
             animateWeatherIcon()
             animateContentViews()
         }
@@ -201,20 +213,15 @@ class DetailedWeatherFragment : ScopedFragment(), Injectable {
         findNavController().navigate(direction)
     }
 
-    private fun showNoInternetView(){
-        showOrHideContentViews(false)
-        weather_group_loading_bar.visibility = View.GONE
-        no_internet_connection_view.visibility = View.VISIBLE
-    }
+    private fun showContentViews(show: Boolean){
+        val contentViewsVisibilityId = if(show) View.VISIBLE else View.GONE
 
-    private fun showOrHideContentViews(show: Boolean){
-        val visibilityId = if(show) View.VISIBLE else View.GONE
-
-        ll_additional_weather_data.visibility = visibilityId
-        ll_weather_main_info.visibility = visibilityId
-        rv_temperature_by_hours.visibility = visibilityId
-        rv_temperature_on_next_days.visibility = visibilityId
-        ll_location_view.visibility = visibilityId
+        ll_additional_weather_data.visibility = contentViewsVisibilityId
+        ll_weather_main_info.visibility = contentViewsVisibilityId
+        rv_temperature_by_hours.visibility = contentViewsVisibilityId
+        rv_temperature_on_next_days.visibility = contentViewsVisibilityId
+        ll_location_view.visibility = contentViewsVisibilityId
+        iv_weather_icon.visibility = contentViewsVisibilityId
     }
 
     private fun animateWeatherIcon(){
@@ -247,6 +254,30 @@ class DetailedWeatherFragment : ScopedFragment(), Injectable {
         animFadeOut.reset()
         ll_location_view.clearAnimation()
         ll_location_view.startAnimation(animFadeOut)
+    }
+
+    private fun handleError(error: ErrorStatus){
+        when (error) {
+            ErrorStatus.CITY_NOT_FOUND -> {
+                viewModel.removeRecentQuery(cityName)
+                tv_error_text.text = getString(R.string.wrong_city_name_error_text)
+                iv_error_icon.setImageDrawable(activity?.getDrawable(R.drawable.ic_error))
+            }
+            ErrorStatus.NO_INTERNET -> {
+                tv_error_text.text = getString(R.string.no_internet_connection_error_text)
+                iv_error_icon.setImageDrawable(activity?.getDrawable(R.drawable.ic_no_internet))
+            }
+            else -> {
+                tv_error_text.text = getString(R.string.other_error_text)
+                iv_error_icon.setImageDrawable(activity?.getDrawable(R.drawable.ic_error))
+            }
+        }
+        showContentViews(false)
+        weather_group_loading_bar.visibility = View.GONE
+        ll_no_internet_connection_view.visibility = View.VISIBLE
+
+        if(root_view.isRefreshing)
+            root_view.isRefreshing = false
     }
 
 }

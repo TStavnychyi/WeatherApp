@@ -3,6 +3,7 @@ package com.tstv.weatherapp.di.modules
 import android.app.Application
 import com.tstv.weatherapp.data.db.SearchCityRecentQueriesDao
 import com.tstv.weatherapp.data.db.WeatherDatabase
+import com.tstv.weatherapp.data.network.ConnectivityInterceptor
 import com.tstv.weatherapp.data.network.WeatherApiService
 import com.tstv.weatherapp.data.provider.UnitProvider
 import dagger.Module
@@ -15,8 +16,14 @@ class AppModule {
 
     @Singleton
     @Provides
-    fun provideWeatherService(): WeatherApiService {
-        return WeatherApiService()
+    fun provideConnectivityInterceptor(context: Application): ConnectivityInterceptor{
+        return ConnectivityInterceptor(context)
+    }
+
+    @Singleton
+    @Provides
+    fun provideWeatherService(connectivityInterceptor: ConnectivityInterceptor): WeatherApiService {
+        return WeatherApiService(connectivityInterceptor)
     }
 
     @Singleton

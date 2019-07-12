@@ -1,17 +1,13 @@
 package com.tstv.weatherapp.ui.weather_detailed
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.tstv.weatherapp.R
 import com.tstv.weatherapp.data.network.response.ForecastHourlyResponse
 import com.tstv.weatherapp.data.network.response.ForecastResponse
 import com.tstv.weatherapp.data.provider.UnitProvider
 import com.tstv.weatherapp.internal.UnitSystem
-import com.tstv.weatherapp.internal.UnitSystem.*
+import com.tstv.weatherapp.internal.UnitSystem.METRIC
 import com.tstv.weatherapp.repository.WeatherRepository
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import org.threeten.bp.LocalTime
@@ -57,6 +53,12 @@ class DetailedWeatherViewModel @Inject constructor(
         if(viewModelScope.isActive) {
             loadWeather(location, units)
             loadWeatherByHour(location, units)
+        }
+    }
+
+    fun removeRecentQuery(query: String){
+        viewModelScope.launch {
+            weatherRepository.removeRecentQuery(query.toLowerCase().capitalize())
         }
     }
 

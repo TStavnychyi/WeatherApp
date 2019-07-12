@@ -1,23 +1,18 @@
 package com.tstv.weatherapp.ui.weather_detailed.view_holders
 
 import android.annotation.SuppressLint
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.navigation.Navigation
 import com.bumptech.glide.Glide
 import com.tstv.weatherapp.R
 import com.tstv.weatherapp.data.network.response.vo.Day
 import com.tstv.weatherapp.internal.getWeatherIconFromStatus
 import com.tstv.weatherapp.internal.toOffsetDateTime
 import com.tstv.weatherapp.ui.base.BaseViewHolder
-import com.tstv.weatherapp.ui.weather_detailed.DetailedWeatherFragmentDirections
-import kotlinx.android.synthetic.main.fragment_weather_detail_layout.*
 import org.threeten.bp.format.TextStyle
-import org.threeten.bp.temporal.WeekFields
 import java.util.*
 
 class ForecastByDaysViewHolder(

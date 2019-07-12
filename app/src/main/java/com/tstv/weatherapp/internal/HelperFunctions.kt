@@ -5,6 +5,8 @@ import android.net.ConnectivityManager
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.tstv.weatherapp.R
+import com.tstv.weatherapp.data.network.response.vo.ErrorStatus
+import com.tstv.weatherapp.data.network.response.vo.ErrorStatus.*
 import org.threeten.bp.Instant
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.ZoneId
@@ -47,8 +49,12 @@ fun formatMinutes(minutes: String): String{
     return result
 }
 
-fun isInternetConnection(appContext: Context): Boolean {
-    val connectivityManager = appContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-    val networkInfo = connectivityManager.activeNetworkInfo
-    return networkInfo != null && networkInfo.isConnected
+fun getErrorStatusFromErrorCode(code: Int): ErrorStatus{
+    return when(code){
+        401 -> INVALID_API_KEY
+        404 -> CITY_NOT_FOUND
+        429 -> API_KEY_BLOCKED
+        500 -> INTERNAL_SERVER_ERROR
+        else -> OTHER
+    }
 }

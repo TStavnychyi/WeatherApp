@@ -25,7 +25,7 @@ class SearchCityViewModel @Inject constructor(
 
     fun removeRecentQuery(query: String){
         viewModelScope.launch {
-            repository.removeRecentQuery(query)
+            repository.removeRecentQuery(query.toLowerCase().capitalize())
         }
     }
 
