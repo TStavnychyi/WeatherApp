@@ -15,4 +15,6 @@
     <string name="city_autocomplete_text_view_hint">Type city name</string>
     <string name="no_internet_connection_error_text">No internet connection</string>
     <string name="other_error_text">Something went wrong</string>
+    <string name="weather_hourly_title">Hourly</string>
+    <string name="tv_daily_title">Daily</string>
 </resources>

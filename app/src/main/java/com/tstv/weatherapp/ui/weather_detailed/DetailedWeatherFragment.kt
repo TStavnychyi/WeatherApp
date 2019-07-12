@@ -220,8 +220,7 @@ class DetailedWeatherFragment : ScopedFragment(), Injectable {
 
         ll_additional_weather_data.visibility = contentViewsVisibilityId
         ll_weather_main_info.visibility = contentViewsVisibilityId
-        rv_temperature_by_hours.visibility = contentViewsVisibilityId
-        rv_temperature_on_next_days.visibility = contentViewsVisibilityId
+        ll_future_forecast_block.visibility = contentViewsVisibilityId
         ll_location_view.visibility = contentViewsVisibilityId
         iv_weather_icon.visibility = contentViewsVisibilityId
     }
@@ -246,12 +245,8 @@ class DetailedWeatherFragment : ScopedFragment(), Injectable {
         ll_weather_main_info.startAnimation(animFadeOut)
 
         animFadeOut.reset()
-        rv_temperature_by_hours.clearAnimation()
-        rv_temperature_by_hours.startAnimation(animFadeOut)
-
-        animFadeOut.reset()
-        rv_temperature_on_next_days.clearAnimation()
-        rv_temperature_on_next_days.startAnimation(animFadeOut)
+        ll_future_forecast_block.clearAnimation()
+        ll_future_forecast_block.startAnimation(animFadeOut)
 
         animFadeOut.reset()
         ll_location_view.clearAnimation()
